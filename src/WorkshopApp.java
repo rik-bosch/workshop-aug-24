@@ -1,4 +1,6 @@
 import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class WorkshopApp {
     private final byte[] message = {
@@ -20,20 +22,39 @@ public class WorkshopApp {
         }
     }
 
+    public void writeHttpHeaders(OutputStream out) {
+        String headers = """
+                HTTP/1.1 200 OK
+                Content-Type: text/plain
+                
+                """;
+
+        try {
+            out.write(headers.getBytes());
+        }
+        catch (IOException e) {
+            System.err.println("Error writing bytes.");
+            System.err.println(e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         var app = new WorkshopApp();
         try (
-            var fos = new FileOutputStream("hallo.txt")
+                var server = new ServerSocket(8080);
+                Socket socket = server.accept();
+                OutputStream outputStream = socket.getOutputStream();
         ) {
-            app.helloWorld(fos);
-        }
-        catch (FileNotFoundException e) {
-            System.err.println("Error opening file.");
-            System.err.println(e.getMessage());
+            System.out.println("Listening on: http://localhost:8080");
+            app.writeHttpHeaders(outputStream);
+            app.helloWorld(outputStream);
         }
         catch (IOException e) {
-            System.err.println("Error closing file.");
+            System.err.println("Error opening server.");
             System.err.println(e.getMessage());
+        }
+        finally {
+            System.out.println("My job is done.");
         }
     }
 }
