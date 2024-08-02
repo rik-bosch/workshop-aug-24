@@ -1,5 +1,4 @@
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 public class WorkshopApp {
     private final byte[] message = {
@@ -23,6 +22,18 @@ public class WorkshopApp {
 
     public static void main(String[] args) {
         var app = new WorkshopApp();
-        app.helloWorld(System.out);
+        try (
+            var fos = new FileOutputStream("hallo.txt")
+        ) {
+            app.helloWorld(fos);
+        }
+        catch (FileNotFoundException e) {
+            System.err.println("Error opening file.");
+            System.err.println(e.getMessage());
+        }
+        catch (IOException e) {
+            System.err.println("Error closing file.");
+            System.err.println(e.getMessage());
+        }
     }
 }
