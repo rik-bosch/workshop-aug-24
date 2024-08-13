@@ -26,7 +26,15 @@ public class WorkshopApp {
         out.write(headers.getBytes());
     }
 
-    public static void main(String[] args) throws Exception {
+    public int hash(byte[] data) {
+        int hash = 5381;
+        for (byte b: data) {
+            hash = (hash << 5) + hash + b;
+        }
+        return hash;
+    }
+
+    public static void webMain() throws Exception {
         var app = new WorkshopApp();
         System.out.println("Listening on: http://localhost:8080");
         try (
@@ -38,5 +46,13 @@ public class WorkshopApp {
             app.helloWorld(outputStream);
         }
         System.out.println("My job is done.");
+    }
+
+    public static void main(String[] args) throws Exception {
+        var app = new WorkshopApp();
+        var input = new FileInputStream("hello.txt");
+        var hash = app.hash(input.readAllBytes());
+
+        System.out.println(hash);
     }
 }
