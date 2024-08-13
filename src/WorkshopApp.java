@@ -50,9 +50,9 @@ public class WorkshopApp {
 
     public static void main(String[] args) throws Exception {
         var app = new WorkshopApp();
-        var input = new FileInputStream("hello.txt");
-        var hash = app.hash(input.readAllBytes());
-
-        System.out.println(hash);
+        try (var input = new FileInputStream("hello.txt")) {
+            var hash = app.hash(input.readAllBytes());
+            System.out.println(hash);
+        }
     }
 }
