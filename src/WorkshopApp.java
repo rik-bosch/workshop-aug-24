@@ -3,7 +3,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class WorkshopApp {
-    HttpHeaders inputHeaders = new HttpHeaders();
+    private HttpHeaders inputHeaders = new HttpHeaders();
 
     public void writeStuff(OutputStream out) throws Exception {
         var stream = new PrintStream(out);
@@ -18,13 +18,13 @@ public class WorkshopApp {
     public void writeOutputHeaders(OutputStream out, int contentLength) throws Exception {
         String template = """
                 HTTP/1.1 200 OK\r
-                Content-Type: text/plain\r
+                Content-Type: application/json\r
                 Content-Length: %d\r
                 \r
                 """;
 
-        var outputStream = new PrintStream(out);
-        outputStream.printf(template, contentLength);
+        byte[] headers = template.formatted(contentLength).getBytes();
+        out.write(headers);
     }
 
     public void readInputHeaders(InputStream in) throws Exception {
@@ -55,7 +55,7 @@ public class WorkshopApp {
                 var inputStream = socket.getInputStream();
                 var buffer = new ByteArrayOutputStream()
         ) {
-            app.readInputHeaders(inputStream);
+//            app.readInputHeaders(inputStream);
             app.writeStuff(buffer);
             app.writeOutputHeaders(outputStream, buffer.size());
             outputStream.write(buffer.toByteArray());
