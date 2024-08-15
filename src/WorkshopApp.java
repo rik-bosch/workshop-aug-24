@@ -3,16 +3,22 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class WorkshopApp {
-    private HttpHeaders inputHeaders = new HttpHeaders();
+    private final HttpHeaders inputHeaders = new HttpHeaders();
 
     public void writeStuff(OutputStream out) throws Exception {
         var stream = new PrintStream(out);
+        var headerList = inputHeaders.getHeaders();
+        var lastIndex = headerList.size() - 1;
 
         stream.print('{');
-        for (var header: inputHeaders.getHeaders()) {
-            stream.printf("\"%s\":\"%s\",", header.key(), header.value());
+        for (int i = 0; i <= lastIndex; i++) {
+            var header = headerList.get(i);
+            stream.printf("\"%s\":\"%s\"", header.key(), header.value());
+            if (i < lastIndex) {
+                stream.print(',');
+            }
         }
-        stream.print("\"\":null}");
+        stream.print("}");
     }
 
     public void writeOutputHeaders(OutputStream out, int contentLength) throws Exception {
@@ -34,7 +40,7 @@ public class WorkshopApp {
 
         for (
                 line = lineReader.getLine();
-                !lineReader.eof() && !line.isEmpty();
+                !line.isEmpty();
                 line = lineReader.getLine()
         ) {
             var parts = line.split(": ");
@@ -55,7 +61,7 @@ public class WorkshopApp {
                 var inputStream = socket.getInputStream();
                 var buffer = new ByteArrayOutputStream()
         ) {
-//            app.readInputHeaders(inputStream);
+            app.readInputHeaders(inputStream);
             app.writeStuff(buffer);
             app.writeOutputHeaders(outputStream, buffer.size());
             outputStream.write(buffer.toByteArray());
