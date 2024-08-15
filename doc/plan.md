@@ -1,12 +1,12 @@
-Volgorde
-========
+Stappen naar low-level web app
+==============================
 
-1. Opzetten project: celsius naar fahrenheit, basale uitleg subroutines en global/stack memory.
-2. CPU architectuur: omschrijven naar 3-address instructies en binary logic.
-3. Output bytestreams: Hello world. Stream naar stdout, file out en socket out.
-4. Input bytestreams: djb2 algoritme uitvoeren op een tekstfile.
-5. Hash maps: schrijf een word counter.
-6. Dynamic memory: linked lists (token queue) en uitleg over de heap.
-7. Lexical parser: json tokens genereren obv input
-8. Grammar parser: json strings naar Java objects
-9. Wrapping up: van input naar memory en van memory naar output.
+1. Opzetten project, schrijf eerste algoritme. Wat is binaire data? Hoe werkt RAM?
+2. Bytecode ontleden. Wat doet een CPU?
+3. Low-level output: "Hello world"
+4. HTTP/JSON output, output bufferen
+5. Input hashen
+6. Line reader en HTTP headers parsen
+8. Dynamic memory: maak een list of records, serialize naar JSON
+7. Lexical parser: JSON tokenizer
+9. Grammar parser: JSON input naar list of records
