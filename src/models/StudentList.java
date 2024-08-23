@@ -3,7 +3,7 @@ package models;
 import java.io.PrintStream;
 
 public class StudentList {
-    private Student head;
+    private final Student head;
     private Student tail;
 
     public StudentList() {
@@ -20,10 +20,6 @@ public class StudentList {
         list.add(new Student(5, "Frits", 13, Education.VWO));
         list.add(new Student(6, "Dirk", 18, Education.VWO));
         return list;
-    }
-
-    public Student first() {
-        return head.getNext();
     }
 
     public void add(Student student) {
