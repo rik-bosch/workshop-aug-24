@@ -1,3 +1,7 @@
+import input.HttpHeaders;
+import input.LineReader;
+import models.StudentList;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -5,20 +9,10 @@ import java.net.Socket;
 public class WorkshopApp {
     private final HttpHeaders inputHeaders = new HttpHeaders();
 
-    public void writeStuff(OutputStream out) throws Exception {
+    public void writeStuff(OutputStream out) {
         var stream = new PrintStream(out);
-        var headerList = inputHeaders.getHeaders();
-        var lastIndex = headerList.size() - 1;
-
-        stream.print('{');
-        for (int i = 0; i <= lastIndex; i++) {
-            var header = headerList.get(i);
-            stream.printf("\"%s\":\"%s\"", header.key(), header.value());
-            if (i < lastIndex) {
-                stream.print(',');
-            }
-        }
-        stream.print("}");
+        var studentList = StudentList.mock();
+        studentList.writeJson(stream);
     }
 
     public void writeOutputHeaders(OutputStream out, int contentLength) throws Exception {
