@@ -7,6 +7,6 @@ Stappen naar low-level web app
 4. HTTP/JSON output, output bufferen
 5. Input hashen
 6. Line reader en HTTP headers parsen
-8. Dynamic memory: maak een list of records, serialize naar JSON
+8. Dynamic memory: maak een list of POJO's, serialize naar JSON
 7. Lexical parser: JSON tokenizer
 9. Grammar parser: JSON input naar list of records
