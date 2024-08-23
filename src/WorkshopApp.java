@@ -12,6 +12,7 @@ public class WorkshopApp {
     public void writeStuff(OutputStream out) {
         var stream = new PrintStream(out);
         var studentList = StudentList.mock();
+        studentList.filterOnExamYear();
         studentList.writeJson(stream);
     }
 

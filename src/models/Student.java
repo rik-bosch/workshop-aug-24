@@ -65,4 +65,12 @@ public class Student {
     public void setNext(Student next) {
         this.next = next;
     }
+
+    public boolean isExamYear() {
+        return switch (education) {
+            case Education.VMBO_T -> age == 16;
+            case Education.HAVO -> age == 17;
+            case Education.VWO -> age == 18;
+        };
+    }
 }

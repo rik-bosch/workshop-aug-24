@@ -41,4 +41,17 @@ public class StudentList {
         }
         jsonOutput.print(']');
     }
+
+    public void filterOnExamYear() {
+        var prev = this.head;
+        var cur = prev.getNext();
+
+        while (cur != null) {
+            if (!cur.isExamYear()) {
+                prev.setNext(cur.getNext());
+            }
+            prev = cur;
+            cur = prev.getNext();
+        }
+    }
 }
