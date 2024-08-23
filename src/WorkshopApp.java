@@ -1,10 +1,11 @@
 import input.HttpHeaders;
 import input.LineReader;
+import input.parser.JsonLex;
+import input.parser.token.EofToken;
 import models.StudentList;
 
 import java.io.*;
 import java.net.ServerSocket;
-import java.net.Socket;
 
 public class WorkshopApp {
     private final HttpHeaders inputHeaders = new HttpHeaders();
@@ -46,17 +47,30 @@ public class WorkshopApp {
         }
     }
 
+    public void parseBody(InputStream in) throws Exception {
+        String contentLength = inputHeaders.getHeader("Content-Length");
+        if (contentLength != null) {
+            int length = Integer.parseInt(contentLength);
+            byte[] body = in.readNBytes(length);
+            var lex = new JsonLex(body);
+            for (var t = lex.getToken(); !(t instanceof EofToken); t = lex.getToken()) {
+                System.out.println(t);
+            }
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         var app = new WorkshopApp();
         System.out.println("Listening on: http://localhost:8080");
         try (
                 var server = new ServerSocket(8080);
-                Socket socket = server.accept();
+                var socket = server.accept();
                 var outputStream = socket.getOutputStream();
                 var inputStream = socket.getInputStream();
                 var buffer = new ByteArrayOutputStream()
         ) {
             app.readInputHeaders(inputStream);
+            app.parseBody(inputStream);
             app.writeStuff(buffer);
             app.writeOutputHeaders(outputStream, buffer.size());
             outputStream.write(buffer.toByteArray());
