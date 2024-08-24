@@ -46,7 +46,9 @@ public class StudentList {
             if (!cur.isExamYear()) {
                 prev.setNext(cur.getNext());
             }
-            prev = cur;
+            else {
+                prev = cur;
+            }
             cur = prev.getNext();
         }
     }
