@@ -3,16 +3,26 @@ package input.parser;
 import input.parser.token.*;
 
 public class JsonLex {
-    private byte[] data;
+    private final byte[] data;
     private int index = 0;
+    private Token buffer = null;
 
     public JsonLex(byte[] data) {
         this.data = data;
         skipWhitespaces();
     }
 
+    public int getOffset() {
+        return index;
+    }
+
     public Token getToken() {
-        if (index >= data.length) {
+        if (buffer != null) {
+            var t = buffer;
+            buffer = null;
+            return t;
+        }
+        else if (index >= data.length) {
             return new EofToken();
         }
         else if (isDigit(data[index])) {
@@ -26,6 +36,10 @@ public class JsonLex {
         }
     }
 
+    public void putBack(Token token) {
+        buffer = token;
+    }
+
     private void skipWhitespaces() {
         while (index < data.length && data[index] <= 0x20) {
             index++;
@@ -36,7 +50,7 @@ public class JsonLex {
         byte value = data[index];
         index++;
         skipWhitespaces();
-        return new SymbolToken(value);
+        return new SymbolToken((char)value);
     }
 
     private Token getNumberToken() {

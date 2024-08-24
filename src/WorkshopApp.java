@@ -1,7 +1,7 @@
 import input.HttpHeaders;
 import input.LineReader;
 import input.parser.JsonLex;
-import input.parser.token.EofToken;
+import input.parser.StudentParser;
 import models.StudentList;
 
 import java.io.*;
@@ -9,10 +9,10 @@ import java.net.ServerSocket;
 
 public class WorkshopApp {
     private final HttpHeaders inputHeaders = new HttpHeaders();
+    private StudentList studentList = null;
 
     public void writeStuff(OutputStream out) {
         var stream = new PrintStream(out);
-        var studentList = StudentList.mock();
         studentList.filterOnExamYear();
         studentList.writeJson(stream);
     }
@@ -52,10 +52,9 @@ public class WorkshopApp {
         if (contentLength != null) {
             int length = Integer.parseInt(contentLength);
             byte[] body = in.readNBytes(length);
-            var lex = new JsonLex(body);
-            for (var t = lex.getToken(); !(t instanceof EofToken); t = lex.getToken()) {
-                System.out.println(t);
-            }
+            var lexer = new JsonLex(body);
+            var parser = new StudentParser(lexer);
+            studentList = parser.parseJson();
         }
     }
 

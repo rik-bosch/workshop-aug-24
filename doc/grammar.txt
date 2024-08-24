@@ -1,0 +1,26 @@
+json
+    : arr EOF                               { return p1 }
+    ;
+
+studentArr                                  { var studentList = new StudentList() }
+    : '[' student (',' student)* ']'        { studentList.add(p2); studentList.add(p4); return studentList }
+    | '[' ']'                               { return studentList }
+    ;
+
+student                             { var student = new Student() }
+    : '{' pair (',' pair)* '}'      { return student }
+    | '{' '}'                       { return student }
+    ;
+
+pair
+    : "id" ':' NUMBER               { student.setId(p3) }
+    | "name" ':' STRING             { student.setName(p3) }
+    | "age" ':' NUMBER              { student.setAge(p3) }
+    | "education" ':' education     { student.setEducation(p3) }
+    ;
+
+education
+    : "VMBO_T"      { return Education.VMBO_T }
+    | "HAVO"        { return Education.HAVO }
+    | "VWO"         { return Education.VWO }
+    ;

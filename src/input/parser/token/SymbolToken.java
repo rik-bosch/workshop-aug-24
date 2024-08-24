@@ -1,8 +1,8 @@
 package input.parser.token;
 
-public record SymbolToken(byte value) implements Token {
+public record SymbolToken(char value) implements Token {
     @Override
     public String toString() {
-        return "SymbolToken[value='" + (char)value() + "']";
+        return "SymbolToken[value='" + value() + "']";
     }
 }
